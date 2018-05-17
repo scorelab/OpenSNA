@@ -11,5 +11,9 @@ class Graph:
     def get_graph(self):
         return self.g
 
-    def load_graph(self, edge_list):
-        self.g = snap.LoadEdgeList(snap.PUNGraph, edge_list, 0, 1, ',')
+    def load_graph(self, edge_list, directed=False):
+        if directed:
+            self.g = snap.LoadEdgeList(snap.PNGraph, edge_list, 0, 1, ',')
+        else:
+            self.g = snap.LoadEdgeList(snap.PUNGraph, edge_list, 0, 1, ',')
+
