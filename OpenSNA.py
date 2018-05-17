@@ -12,4 +12,4 @@ class Graph:
         return self.g
 
     def load_graph(self, edge_list):
-        self.g = snap.LoadEdgeList(snap.PNGraph, edge_list, 0, 1, ',')
+        self.g = snap.LoadEdgeList(snap.PUNGraph, edge_list, 0, 1, ',')
