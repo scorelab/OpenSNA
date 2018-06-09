@@ -74,7 +74,7 @@ def concat_features(X, features):
             lst[i].append(feature_value)
     return lst
 
-g = load_data('karate.csv')
+g = load_data('power.csv')
 
 # Generate positive training and testing edge list
 EDGES_POSITIVE = g.edges()
@@ -98,8 +98,8 @@ feature_values = concat_features(EDGES, features)
 print "Total nodes", len(g.nodes())
 print "Total edges", len(g.edges())
 
-### Training ###
-clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(5, 2), random_state=1)
+### MLP ###
+clf = MLPClassifier(solver='lbfgs', alpha=1e-5, hidden_layer_sizes=(10, 10), random_state=1)
 # clf = svm.SVC(kernel='rbf', random_state=0, gamma=1, C=1)
 clf.fit(feature_values, Y)
 
@@ -109,7 +109,24 @@ pred = cross_val_predict(clf, feature_values, Y, cv=6)
 
 
 ### Results ###
-print "Accuracy", accuracy_score(Y, pred)
+print "Accuracy:", accuracy_score(Y, pred)
+precision, recall, fscore, support = precision_recall_fscore_support(Y, pred, average='binary')
+print "Precision:", precision
+print "Recall:", recall
+print "f-score:", fscore
+
+
+### SVN ###
+clf = svm.SVC(kernel='rbf', random_state=0, gamma=1, C=1)
+clf.fit(feature_values, Y)
+
+
+### Validation ###
+pred = cross_val_predict(clf, feature_values, Y, cv=6)
+
+
+### Results ###
+print "Accuracy:", accuracy_score(Y, pred)
 precision, recall, fscore, support = precision_recall_fscore_support(Y, pred, average='binary')
 print "Precision:", precision
 print "Recall:", recall
