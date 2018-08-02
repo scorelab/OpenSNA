@@ -79,6 +79,7 @@ g = load_data('power.csv')
 # Generate positive training and testing edge list
 EDGES_POSITIVE = g.edges()
 print len(list(g.edges()))
+print len(list(g.))
 
 # Generate negative edge list
 EDGES_NEGATIVE = generate_non_edge_list(g)
