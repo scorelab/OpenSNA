@@ -1,9 +1,10 @@
 import random
-import snap
+import networkx as nx
+from utils.link_prediction import link_prediction
 
 class Graph:
     def __init__(self):
-        self.g = snap.TNEANet();
+        self.g = nx.Graph()
 
     def set_graph(self, g):
         self.g = g
@@ -12,8 +13,7 @@ class Graph:
         return self.g
 
     def load_graph(self, edge_list, directed=False):
-        if directed:
-            self.g = snap.LoadEdgeList(snap.PNGraph, edge_list, 0, 1, ',')
-        else:
-            self.g = snap.LoadEdgeList(snap.PUNGraph, edge_list, 0, 1, ',')
+        self.g = nx.read_edgelist(edge_list, delimiter=',')
 
+    def link_predict(self, params, classifier='MLP'):
+        return link_prediction.predict(self.g, params, classifier)
