@@ -1,11 +1,5 @@
 ## OpenSNA
 
-A python toolkit to analyze temporal graphs
+OpenSNA is a python toolkit to analyze social media interactions. Current implementation is a wrapper around NetworkX which is capable of doing higher order analytics on graph data. 
 
-#### Roadmap
-* dynamic edge list --> u1, u2, timestamp
-* statistics
-	* centrality measures
-	* pagerank
-* layout
-* filters
+
