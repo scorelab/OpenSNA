@@ -2,6 +2,7 @@ import random
 import networkx as nx
 from utils.link_prediction import link_prediction
 
+
 class Graph:
     def __init__(self):
         self.g = nx.Graph()
@@ -17,3 +18,4 @@ class Graph:
 
     def link_predict(self, params, classifier='MLP'):
         return link_prediction.predict(self.g, params, classifier)
+        
