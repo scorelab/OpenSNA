@@ -3,8 +3,13 @@ import numpy as np
 import random
 from sklearn.neural_network import MLPClassifier
 from sklearn import svm
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support, roc_curve, auc
+from sklearn.metrics import (
+    accuracy_score,
+    precision_recall_fscore_support,
+    roc_curve,
+    auc)
 from sklearn.model_selection import cross_val_predict
+
 
 def gml_to_edgelist(f):
     g = nx.read_gml(f)
@@ -12,23 +17,29 @@ def gml_to_edgelist(f):
 
 # gml_to_edgelist('power.gml')
 
+
 def load_data(path):
     g = nx.read_edgelist(path, delimiter=',')
     return g
 
+
 def partition(data):
     return data[:len(data)*2/3], data[len(data)*2/3:]
 
+
 def generate_non_edge_list(g):
-    n = len(g.edges()) # Negative edge list size is same as positive list size
+    n = len(g.edges())  # Negative edge list size is same as positive list size
     non_edges = []
     for u in g.nodes():
         for v in g.nodes():
-            if u == v: continue
-            if g.has_edge(u, v): continue
+            if u == v:
+                continue
+            if g.has_edge(u, v):
+                continue
             non_edges.append((u, v))
     neg_sample = random.sample(non_edges, n)
     return neg_sample
+
 
 def generate_class_labels(g, edges):
     y = []
@@ -39,6 +50,7 @@ def generate_class_labels(g, edges):
             y.append(0)
     return y
 
+
 def adamic_adar(g, X):
     preds = nx.adamic_adar_index(g, X)
     lst = []
@@ -47,6 +59,7 @@ def adamic_adar(g, X):
 
     max_p = max(lst)
     return [x/max_p for x in lst]
+
 
 def jaccard(g, X):
     preds = nx.jaccard_coefficient(g, X)
@@ -57,6 +70,7 @@ def jaccard(g, X):
     max_p = max(lst)
     return [x/max_p for x in lst]
 
+
 def common_neighbors(g, X):
     lst = []
     for x in X:
@@ -65,6 +79,7 @@ def common_neighbors(g, X):
     max_p = float(max(lst))
 
     return [x/max_p for x in lst]
+
 
 def concat_features(X, features):
     lst = [[] for x in range(len(X))]
@@ -94,20 +109,21 @@ def predict(g, params, classifier):
     features = [feature1, feature2, feature3]
     feature_values = concat_features(EDGES, features)
 
-
     if classifier == "MLP":
-        ### MLP ###
-        clf = MLPClassifier(solver=params["solver"], alpha=params["alpha"], hidden_layer_sizes=params["hidden_layer_sizes"], random_state=params["random_state"])
+        # MLP #
+        clf = MLPClassifier(
+            solver=params["solver"],
+            alpha=params["alpha"],
+            hidden_layer_sizes=params["hidden_layer_sizes"],
+            random_state=params["random_state"]
+            )
         # clf = svm.SVC(kernel='rbf', random_state=0, gamma=1, C=1)
         clf.fit(feature_values, Y)
 
-
-        ### Validation ###
+        # Validation #
         pred = cross_val_predict(clf, feature_values, Y, cv=6)
 
-
-        ### Results ###
-
+        # Results #
         print "*"*10
         print "MultiLayer Perceptron Model"
         print "Accuracy:", accuracy_score(Y, pred)
@@ -118,16 +134,19 @@ def predict(g, params, classifier):
 
     elif classifier == "SVN":
 
-        ### SVN ###
-        clf = svm.SVC(kernel=params["kernel"], random_state=params["random_state"], gamma=params["gamma"], C=params["C"])
+        # SVN #
+        clf = svm.SVC(
+            kernel=params["kernel"],
+            random_state=params["random_state"],
+            gamma=params["gamma"],
+            C=params["C"]
+            )
         clf.fit(feature_values, Y)
 
-
-        ### Validation ###
+        # Validation #
         pred = cross_val_predict(clf, feature_values, Y, cv=6)
 
-
-        ### Results ###
+        # Results #
         print "*"*10
         print "SVN"
         print "Accuracy:", accuracy_score(Y, pred)
