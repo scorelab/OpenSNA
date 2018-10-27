@@ -1,1 +1,10 @@
+#main.py dependencies
 pandas>=0.23.4
+#OpenSNA.py dependencies
+networkx>=2.2
+#link_prediction.py dependencies
+numpy>=1.15.3
+scikit-learn>=0.20.0
+#link_prediction.ipynb dependencies (shares alot with link_prediction.py)
+matplotlib>=3.0.1
+scipy>=1.1.0
